@@ -7,8 +7,8 @@ const userSchema = new mongoose.Schema(
         pseudo : {
             type : String,
             required : true,
-            minLength : 3,
-            maxLength : 55,
+            minlength : 3,
+            maxlength : 55,
             unique : true,
             trim: true
         },
@@ -17,13 +17,14 @@ const userSchema = new mongoose.Schema(
             required : true,
             validate: [isEmail],
             lowercase: true,
+            unique : true,
             trim: true
         },
         password : {
             type : String,
             required : true,
             max: 1024,
-            minLength : 6
+            minlength : 6
         },
         picture : {
             type : String,
@@ -55,6 +56,20 @@ userSchema.pre("save", async function(next) {
     next();
 });
 
+userSchema.statics.login = async function(email, password) {
+    const user = await this.findOne({ email: email});
+    if (user) {
+        const auth = await bcrypt.compare(password, user.password);
+        if (auth) {
+            return user;
+        }
+        throw Error('password incorrect');
+    }
+    throw Error('email incorrect')
+}
+
+
+
 const UserModel = mongoose.model('user',userSchema);
 
-module.exports = UserModel;
+module.exports = UserModel; 
