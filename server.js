@@ -9,7 +9,7 @@ const app = express();
 
 app.use(express.json());
 app.use(cookieParser());
-
+app.use(express.static(__dirname + '/client/public'));
 //jwt 
 app.get('*', checkUser);
 app.get('/jwtid', requireAuth, (req, res) => {
