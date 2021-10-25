@@ -5,7 +5,22 @@ const postRoutes = require('./routes/post.routes')
 require('dotenv').config({path: './config/.env'});
 require('./config/db')
 const {checkUser, requireAuth } = require('./middleware/auth.middleware');
+const cors = require('cors');
 const app = express();
+
+app.use(cors());
+
+// const corsOptions = {
+//     origin: process.env.CLIENT_URL,
+//     credentials: true, 
+//     'allowedHeaders': ['sessionId', 'Content-Type'],
+//     'exposedHeaders': ['sessionId'],
+//     'method': 'GET,HEAD,PUT,POST,DELETE',
+//     'preflightContinue': false 
+// }
+//app.use(cors(corsOptions))
+//app.use(cors({origin: process.env.CLIENT_URL}))
+
 
 app.use(express.json());
 app.use(cookieParser());
